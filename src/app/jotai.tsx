@@ -1,36 +1,41 @@
 import { atom } from "jotai";
 
-const initialCosts = [
-  "賃料",
-  "日割り家賃",
-  "敷金",
-  "礼金（税込）",
-  "保証金・解約引",
-  "共益費（税込）",
-  "駐車場利用料",
-  "駐車場保証金",
-  "駐車場礼金",
-  "バイク置場利用料",
-  "駐輪場利用料",
-  "更新料・更新事務手数料",
-  "鍵交換費用",
-  "室内消毒費用",
-  "24時間駆け付けサポート",
-  "電子ロック初期費用",
-  "CATV",
-  "月額保証料/保険料",
-  "カードキー発行手数料",
-  "初回保証料 ",
-  "月次保証料",
-  "仲介手数料",
-].map((item) => ({
-  項目: item,
-  金額: process.env.NEXT_PUBLIC_APP_ENV === "development" ? 1000 : 0,
+const isDev = process.env.NEXT_PUBLIC_APP_ENV === "development";
+
+// 項目名, 初期費用フラグ, 月次費用フラグ
+const costItems: [string, boolean, boolean][] = [
+  ["賃料", true, true],
+  ["日割り家賃", true, false],
+  ["敷金", true, false],
+  ["礼金（税込）", true, false],
+  ["保証金・解約引", true, false],
+  ["共益費（税込）", true, true],
+  ["駐車場利用料", true, true],
+  ["駐車場保証金", true, false],
+  ["駐車場礼金", true, false],
+  ["バイク置場利用料", false, true],
+  ["駐輪場利用料", false, true],
+  ["更新料・更新事務手数料", false, false],
+  ["鍵交換費用", true, false],
+  ["室内消毒費用", true, false],
+  ["24時間駆け付けサポート", true, true],
+  ["電子ロック初期費用", true, false],
+  ["CATV", false, true],
+  ["月額保証料/保険料", false, true],
+  ["カードキー発行手数料", true, false],
+  ["初回保証料 ", true, false],
+  ["月次保証料", false, true],
+  ["仲介手数料", true, false],
+];
+
+const initialCosts = costItems.map(([項目, 初期費用Default, 月次費用Default]) => ({
+  項目,
+  金額: isDev ? 1000 : 0,
   単位: "円",
-  初期費用: false,
-  月次費用: false,
-  初期費用合計: process.env.NEXT_PUBLIC_APP_ENV === "development" ? 1000 : 0,
-  月次費用合計: process.env.NEXT_PUBLIC_APP_ENV === "development" ? 1000 : 0,
+  初期費用: isDev ? 初期費用Default : false,
+  月次費用: isDev ? 月次費用Default : false,
+  初期費用合計: isDev ? 1000 : 0,
+  月次費用合計: isDev ? 1000 : 0,
   備考: "",
 }));
 
@@ -73,8 +78,6 @@ export type ContactFormState = {
   }>;
   remarks: string;
 };
-
-const isDev = process.env.NEXT_PUBLIC_APP_ENV === "development";
 
 export const contactFormAtom = atom<ContactFormState>({
   customer: {

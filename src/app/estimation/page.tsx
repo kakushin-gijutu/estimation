@@ -1,5 +1,6 @@
 "use client";
 import { contactFormAtom } from "@/app/jotai";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -16,9 +18,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAtom } from "jotai";
+import { useState } from "react";
 
 export default function Page() {
   const [value, setValue] = useAtom(contactFormAtom);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   return (
     <Card className="w-full max-w-7xl mx-auto">
@@ -28,18 +32,25 @@ export default function Page() {
       <CardContent className="p-6">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h2 className="text-2xl font-bold">{value.property.name}</h2>
-            <p>{value.property.type}</p>
+            <h2 className="text-2xl font-bold">{value.customer.name} 様</h2>
+            <p className="text-lg">{value.property.name}</p>
           </div>
           <div className="text-right">
             <p>作成日 {value.property.creationDate}</p>
             <p>有効期限 {value.property.expirationDate}</p>
+            <Button
+              variant={isEditMode ? "default" : "outline"}
+              size="sm"
+              onClick={() => setIsEditMode(!isEditMode)}
+              className="mt-2 print:hidden"
+            >
+              {isEditMode ? "編集モード: ON" : "編集モード: OFF"}
+            </Button>
           </div>
         </div>
         <div className="flex justify-between items-center mb-4">
           <div>
             <h3 className="font-bold">物件名：{value.property.name}</h3>
-            <h3 className="font-bold">物件タイプ：{value.property.type}</h3>
           </div>
         </div>
         <div className="flex justify-between">
@@ -55,7 +66,6 @@ export default function Page() {
               {value.costs
                 .reduce((acc, cost) => acc + cost.月次費用合計, 0)
                 .toLocaleString()}
-              /月
             </p>
           </div>
           <div>
@@ -93,9 +103,26 @@ export default function Page() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {value.costs.map((item) => (
-              <TableRow key={item.項目}>
-                <TableCell>{item.項目}</TableCell>
+            {value.costs.map((item, index) => (
+              <TableRow key={index}>
+                <TableCell>
+                  {isEditMode ? (
+                    <Input
+                      value={item.項目}
+                      onChange={(e) => {
+                        const newCosts = [...value.costs];
+                        newCosts[index] = {
+                          ...newCosts[index],
+                          項目: e.target.value,
+                        };
+                        setValue({ ...value, costs: newCosts });
+                      }}
+                      className="min-w-[150px]"
+                    />
+                  ) : (
+                    item.項目
+                  )}
+                </TableCell>
                 <TableCell>{item.金額.toLocaleString()}円</TableCell>
                 <TableCell>{item.単位}</TableCell>
                 <TableCell>{item.初期費用 ? "✓" : ""}</TableCell>
