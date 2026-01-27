@@ -25,13 +25,13 @@ const initialCosts = [
   "仲介手数料",
 ].map((item) => ({
   項目: item,
-  金額: process.env.NODE_ENV === "development" ? 1000 : 0,
-  単位: process.env.NODE_ENV === "development" ? "円" : "円",
-  初期費用: process.env.NODE_ENV === "development" ? false : false,
-  月次費用: process.env.NODE_ENV === "development" ? false : false,
-  初期費用合計: process.env.NODE_ENV === "development" ? 1000 : 0,
-  月次費用合計: process.env.NODE_ENV === "development" ? 1000 : 0,
-  備考: process.env.NODE_ENV === "development" ? "" : "",
+  金額: process.env.NEXT_PUBLIC_APP_ENV === "development" ? 1000 : 0,
+  単位: "円",
+  初期費用: false,
+  月次費用: false,
+  初期費用合計: process.env.NEXT_PUBLIC_APP_ENV === "development" ? 1000 : 0,
+  月次費用合計: process.env.NEXT_PUBLIC_APP_ENV === "development" ? 1000 : 0,
+  備考: "",
 }));
 
 export type ContactFormState = {
@@ -74,37 +74,37 @@ export type ContactFormState = {
   remarks: string;
 };
 
+const isDev = process.env.NEXT_PUBLIC_APP_ENV === "development";
+
 export const contactFormAtom = atom<ContactFormState>({
   customer: {
-    name: process.env.NODE_ENV === "development" ? "ダミー顧客" : "",
+    name: isDev ? "ダミー顧客" : "",
   },
   broker: {
     name: "鯰江",
     company_name: "合同会社RHY",
-    tel: process.env.NODE_ENV === "development" ? "000-0000-0000" : "",
-    fax: process.env.NODE_ENV === "development" ? "000-0000-0000" : "",
-    email: process.env.NODE_ENV === "development" ? "dummy@example.com" : "",
+    tel: isDev ? "000-0000-0000" : "",
+    fax: isDev ? "000-0000-0000" : "",
+    email: isDev ? "dummy@example.com" : "",
     address: "大阪府大阪市東成区深江北1-3-5三好ビル306",
     license: "大阪府知事(1)第65124号",
   },
   property: {
-    name: "Test物件",
-    type: "マンション",
+    name: isDev ? "Test物件" : "",
+    type: isDev ? "マンション" : "",
     creationDate: "",
-    expirationDate:
-      process.env.NODE_ENV === "development" ? "2024年7月10日" : "",
-    moveInDate: process.env.NODE_ENV === "development" ? "2024年7月15日" : "",
-    contractPeriod: process.env.NODE_ENV === "development" ? "2年" : "",
-    contractRenewalFee: process.env.NODE_ENV === "development" ? 129000 : 0,
-    basicRent: process.env.NODE_ENV === "development" ? 129000 : 0,
-    managementFee: process.env.NODE_ENV === "development" ? 16000 : 0,
-    parkingFee: process.env.NODE_ENV === "development" ? 14300 : 0,
-    initialGuaranteeFee: process.env.NODE_ENV === "development" ? 35000 : 0,
-    monthlyGuaranteeFee: process.env.NODE_ENV === "development" ? 1593 : 0,
+    expirationDate: isDev ? "2024年7月10日" : "",
+    moveInDate: isDev ? "2024年7月15日" : "",
+    contractPeriod: isDev ? "2年" : "",
+    contractRenewalFee: isDev ? 129000 : 0,
+    basicRent: isDev ? 129000 : 0,
+    managementFee: isDev ? 16000 : 0,
+    parkingFee: isDev ? 14300 : 0,
+    initialGuaranteeFee: isDev ? 35000 : 0,
+    monthlyGuaranteeFee: isDev ? 1593 : 0,
   },
   costs: initialCosts,
-  remarks:
-    process.env.NODE_ENV === "development"
-      ? "契約年数及び更新費用：当物件の契約年数は2年間とし、契約更新料は129000円となります。\n保証会社契約関連：保証会社契約金として初回契約時に35000円が必要となります。"
-      : "",
+  remarks: isDev
+    ? "契約年数及び更新費用：当物件の契約年数は2年間とし、契約更新料は129000円となります。\n保証会社契約関連：保証会社契約金として初回契約時に35000円が必要となります。"
+    : "",
 });
