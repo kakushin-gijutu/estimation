@@ -45,6 +45,8 @@ export type EstimationRow = {
 export type EstimationInsert = Omit<EstimationRow, "id" | "created_at" | "updated_at">;
 export type EstimationUpdate = Partial<EstimationInsert>;
 
+export type CompanyType = "company" | "individual";
+
 export type CompanyRow = {
   id: string;
   name: string;
@@ -54,6 +56,7 @@ export type CompanyRow = {
   email: string;
   license: string;
   representative_name: string;
+  type: CompanyType;
   created_at: string;
   updated_at: string;
 };
