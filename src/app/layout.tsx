@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/react";
+import { AppLayout } from "@/components/AppLayout";
 
 import "./globals.css";
 
@@ -16,8 +17,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-	title: "〇〇様_御見積書",
-	description: "これは〇〇様_御見積書です",
+	title: "見積書管理 | Estimation Manager",
+	description: "不動産仲介の見積書を作成・管理するアプリケーション",
 };
 
 export default function RootLayout({
@@ -30,7 +31,7 @@ export default function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
-				{children}
+				<AppLayout>{children}</AppLayout>
 				<Analytics />
 			</body>
 		</html>
