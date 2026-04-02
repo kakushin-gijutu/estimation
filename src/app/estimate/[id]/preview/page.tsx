@@ -136,15 +136,6 @@ function generateEmailBody(
     ].join("\n"),
   };
 
-  const viewUrl = `${window.location.origin}/estimate/view/${data.id}`;
-  const buttonLabels: Record<TemplateType, string> = {
-    estimate: "見積書を確認する",
-    update: "更新された見積書を確認する",
-    reminder: "見積書を確認する",
-    expiring: "見積書を確認する",
-    thanks: "見積書の内容を確認する",
-  };
-
   const lines: string[] = [];
   lines.push(`${customer} 様`);
   lines.push("");
@@ -161,10 +152,6 @@ function generateEmailBody(
     lines.push(`  月額費用（税込）: ¥${monthlyTotal}`);
     lines.push("");
   }
-
-  lines.push(`▼ ${buttonLabels[template]}`);
-  lines.push(viewUrl);
-  lines.push("");
   lines.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   lines.push(company);
   if (data.broker_address)

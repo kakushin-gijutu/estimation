@@ -1,4 +1,5 @@
 import React from "react";
+import path from "path";
 import {
   Document,
   Page,
@@ -9,16 +10,17 @@ import {
 } from "@react-pdf/renderer";
 import type { EstimationRow, CostItem } from "./database.types";
 
-// Noto Sans JP (Google Fonts)
+// Noto Sans JP (ローカルTTF)
+const fontsDir = path.join(process.cwd(), "public", "fonts");
 Font.register({
   family: "NotoSansJP",
   fonts: [
     {
-      src: "https://fonts.gstatic.com/s/notosansjp/v52/-F6jfjtqLzI2JPCgQBnw7HFyzSD-AsregP8VFJEk757Y0rw_qMHVdbR2L8Y9QTJ1LwkRg8ts.119.woff2",
+      src: path.join(fontsDir, "NotoSansJP-Regular.ttf"),
       fontWeight: 400,
     },
     {
-      src: "https://fonts.gstatic.com/s/notosansjp/v52/-F6jfjtqLzI2JPCgQBnw7HFyzSD-AsregP8VFBEk757Y0rw_qMHVdbR2L8Y9QTJ1LwkRg8ts.119.woff2",
+      src: path.join(fontsDir, "NotoSansJP-Bold.ttf"),
       fontWeight: 700,
     },
   ],

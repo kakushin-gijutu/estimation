@@ -603,7 +603,7 @@ function CompanyInfo() {
       value:
         "〒537-0002\n大阪市東成区深江北一丁目3番5号\n三好ビル306",
     },
-    { label: "代表者", value: "代表取締役社長 鯰江 清裕" },
+    { label: "代表取締役社長", value: "鯰江 清裕" },
     { label: "設立", value: "2021年8月3日" },
     { label: "資本金", value: "300万円" },
     {

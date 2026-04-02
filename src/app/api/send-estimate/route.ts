@@ -56,6 +56,7 @@ export async function POST(req: NextRequest) {
 
     // PDF生成
     let attachments: { filename: string; content: Buffer }[] = [];
+    let pdfWarning: string | undefined;
     if (estimation) {
       try {
         const pdfBuffer = await renderToBuffer(
@@ -63,10 +64,12 @@ export async function POST(req: NextRequest) {
         );
         const filename = `御見積書_${estimation.property_name || "見積書"}_${estimation.customer_name || ""}様.pdf`;
         attachments = [{ filename, content: Buffer.from(pdfBuffer) }];
-      } catch (pdfError) {
+      } catch (pdfError: any) {
         console.error("PDF generation error:", pdfError);
-        // PDF生成に失敗してもメール送信は続行
+        pdfWarning = pdfError?.message || "PDF生成に失敗しました";
       }
+    } else {
+      pdfWarning = "見積書データが見つかりません（ID: " + estimationId + "）";
     }
 
     const { data, error } = await resend.emails.send({
@@ -82,7 +85,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, id: data?.id });
+    return NextResponse.json({
+      success: true,
+      id: data?.id,
+      pdfAttached: attachments.length > 0,
+      ...(pdfWarning ? { pdfWarning } : {}),
+    });
   } catch (e: any) {
     console.error("Send email error:", e);
     return NextResponse.json(
